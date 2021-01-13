@@ -11,6 +11,8 @@ services:
     restart: always
   sish:
     image: antoniomika/sish:latest
+    #stdin_open: true
+    #tty: true
     container_name: sish
     depends_on: 
       - letsencrypt
@@ -20,15 +22,23 @@ services:
       - ./keys:/keys
       - ./ssl:/ssl
     command: |
-      --ssh-address=:22
-      --http-address=:80
-      --https-address=:443
-      --https=true
+      --ssh-address=:2222
+      --http-address=:2020
+      --https-address=:2021
+      --https=false
       --https-certificate-directory=/ssl
       --authentication-keys-directory=/pubkeys
       --private-key-location=/keys/ssh_key
+      --bind-random-aliases=false
       --bind-random-ports=false
       --bind-random-subdomains=false
-      --domain=ssi.sh
+      --authentication=true
+      --tcp-aliases=true
+      --log-to-file=true
+      --log-to-file-path=/var/log/sish 
+      --authentication-password="supersecret"
+      --idle-connection-timeout=60m
+      --ping-client-interval=5s
+      --domain=sunny5.de
     network_mode: host
     restart: always
