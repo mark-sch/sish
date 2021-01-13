@@ -2,7 +2,28 @@
 
 An open source serveo/ngrok alternative.
 
-## Deploy
+## build sish cli from source
+
+1. Install golang 1.15+, https://golang.org/doc/install
+2. `go generate`
+3. `go build`
+4. The sish executable has been built. Now create and edit a config file: `cp config.example.yml myconfig.yml`
+5. Start sish: `./sish -c myconfig.yml`
+6. Create a systemd startup script, `vim /etc/systemd/system/sish.service`: ```[Unit]
+                                    Description=Sish service
+                                    After=network.target
+
+                                    [Service]
+                                    User=myuser
+                                    ExecStart=/git/sish/sish -c /git/sish/myconfig.yml
+
+                                    [Install]
+                                    WantedBy=multi-user.target
+                                    ```
+7. `sudo systemctl enable sish`
+8. `sudo systemctl start sish`
+
+## Docker Deploy
 
 Builds are made automatically for each commit to the repo and are pushed to Dockerhub. Builds are
 tagged using a commit sha, branch name, tag, latest if released on master.
